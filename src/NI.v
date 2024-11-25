@@ -14,7 +14,7 @@ module tt_um_NI(
 	wire [31:0]data_in;
 	wire proc_valid;
 	reg proc_ready;
-	wire [31:0]data_out;
+	reg [31:0]data_out;
 	reg data_valid;
 	wire proc_ready_in;
 	wire [7:0]flit_in;
@@ -33,13 +33,13 @@ module tt_um_NI(
 	assign data_in = {ui_in,uio_in,uio_in, ui_in};
 	assign flit_in = uio_in[7:0];
 	assign	{uo_out[7:5], uio_out, uio_oe}	= data_out[18:0];
-	assign uo_out[7:0] = flit_out;
+	assign uo_out[4:0] = flit_out[4:0];
 	assign uo_out[0] = proc_ready;
 	assign uo_out[1] = data_valid;
 	assign uo_out[2] = flit_valid;
 
 
-	wire _unused = &{ena,data_out[31:19], 1'b0}; // Unused signals
+	/* verilator lint_off UNUSEDSIGNAL */ wire _unused = &{ena, data_out[31:19], 1'b0}; /* verilator lint_on UNUSEDSIGNAL */
 
 parameter HEADER = 6'b101111;
 parameter TAILER = 8'b11111111;
