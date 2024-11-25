@@ -44,7 +44,7 @@ module tt_um_NI(
 parameter HEADER = 6'b101111;
 parameter TAILER = 8'b11111111;
 
-reg	[47:0]	packet_buffer_in;
+/* verilator lint_off UNUSEDSIGNAL */ reg	[47:0]	packet_buffer_in;/* verilator lint_on UNUSEDSIGNAL */
 reg	[47:0]	packet_buffer_out;
 reg	[2:0]	flit_count_out;
 reg	[2:0]	flit_count_in;
