@@ -24,11 +24,11 @@ module tt_um_NI(
 	wire flit_valid;
 
 assign rst = ~rst_n;
-assign dest_add = ui_in[2:1];
-assign proc_valid = ui_in[3];
-assign proc_ready_in = ui_in[4];
-assign flit_in_valid = ui_in[5];
-assign noc_ready = ui_in[6];
+assign dest_add = ui_in[3:2];
+assign proc_valid = ui_in[4];
+assign proc_ready_in = ui_in[5];
+assign flit_in_valid = ui_in[6];
+assign noc_ready = ui_in[7];
 
 assign data_in = {uio_in[24:0], ui_in};
 assign flit_in = uio_in[32:39];
