@@ -1,26 +1,51 @@
-module NI(
-	input			clk,
-	input			rst,
-	input		[1:0]	dest_add,
-	
-	//processor interface
-	input		[31:0]	data_in,	//data from processor  [check]
-	input			proc_valid,	//indicates data from processor is valid [check]
-	output	reg		proc_ready,	//indicates NI is ready to accept new data	[check] [mips_ni]
-	
-	output	reg	[31:0]	data_out,	//data to processor [check]
-	output	reg		data_valid,	//indicates data to the processor is valid [check]
-	input			proc_ready_in,	//indicates processor is ready to accept the data [check]
-
-	//NoC interface
-	input		[7:0]	flit_in,	//flit from NoC to NI 
-	input			flit_in_valid,	//indicates incoming flit to NI is valid
-	//indicates if NI is ready to accept incoming flits from router
-
-	input			noc_ready,	//indicates if router is ready to accept the flit 
-	output	reg	[7:0]	flit_out,	//flit from NI to NoC
-	output	reg		flit_valid	//indicates flit valid for transmission
+module tt_um_NI(
+	input  	wire 	[7:0] ui_in,    // Dedicated inputs
+    	output 	wire 	[7:0] uo_out,   // Dedicated outputs
+   	input  	wire 	[7:0] uio_in,   // IOs: Input path
+  	output	 wire	[7:0] uio_out,  // IOs: Output path
+   	output 	wire 	[7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
+	input	wire		ena,
+	input	wire		rst_n,
+	input	wire		clk
 );
+
+	wire rst;
+	wire [1:0]dest_add;
+	wire [31:0]data_in;
+	wire proc_valid;
+	wire proc_ready;
+	wire [31:0]data_out;
+	wire data_valid;
+	wire proc_ready_in;
+	wire [7:0]flit_in;
+	wire flit_in_valid;
+	wire noc_ready;
+	wire [7:0]flit_out;
+	wire flit_valid;
+
+assign rst = ~rst_n;
+assign dest_add = ui_in[2:1];
+assign proc_valid = ui_in[3];
+assign proc_ready_in = ui_in[4];
+assign flit_in_valid = ui_in[5];
+assign noc_ready = ui_in[6];
+
+assign data_in = {uio_in[24:0], ui_in};
+assign flit_in = uio_in[32:39];
+
+assign uo_out[0] = proc_ready;
+assign uo_out[1] = data_valid;
+assign uo_out[2] = flit_valid;
+
+assign uio_out[0-7] = data_out[7:0];
+assign uio_out[8-15] = data_out[15:8];
+assign uio_out[16-23] = data_out[23:16];
+assign uio_out[24-31] = data_out[31:24];
+assign uio_out[32-39] = flit_out[7:0];
+
+assign uio_oe[0-39] = 1'b1;
+
+wire *unused = &{ena, 1'b0}; // Unused signals
 
 parameter HEADER = 6'b101111;
 parameter TAILER = 8'b11111111;
