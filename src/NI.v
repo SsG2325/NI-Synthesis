@@ -115,7 +115,7 @@ always @(posedge clk or posedge rst) begin
 						1: begin
 							if(~(|flit_b)) begin
 								state_out 	<= SEND_TAIL;
-								flit_out 	<= packet_buffer_out[7:0]
+								flit_out 	<= packet_buffer_out[7:0];
 							end
 							else begin
 								flit_out 	<= flit_b;
