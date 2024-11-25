@@ -23,29 +23,23 @@ module tt_um_NI(
 	wire [7:0]flit_out;
 	wire flit_valid;
 
-assign rst = ~rst_n;
-assign dest_add = ui_in[3:2];
-assign proc_valid = ui_in[4];
-assign proc_ready_in = ui_in[5];
-assign flit_in_valid = ui_in[6];
-assign noc_ready = ui_in[7];
+	assign rst = ~rst_n;
+	assign dest_add = ui_in[7:6];
+	assign proc_valid = ui_in[5];
+	assign proc_ready_in = ui_in[4];
+	assign flit_in_valid = ui_in[3];
+	assign noc_ready = ui_in[2];
 
-assign data_in = {uio_in[24:0], ui_in};
-assign flit_in = uio_in[32:39];
+	assign data_in = {ui_in,uio_in,uio_in, ui_in};
+	assign flit_in = uio_in[7:0];
+	assign	{uo_out[7:5], uio_out, uio_oe}	= data_out[18:0];
+	assign uo_out[7:0] = flit_out;
+	assign uo_out[0] = proc_ready;
+	assign uo_out[1] = data_valid;
+	assign uo_out[2] = flit_valid;
 
-assign uo_out[0] = proc_ready;
-assign uo_out[1] = data_valid;
-assign uo_out[2] = flit_valid;
 
-assign uio_out[0-7] = data_out[7:0];
-assign uio_out[8-15] = data_out[15:8];
-assign uio_out[16-23] = data_out[23:16];
-assign uio_out[24-31] = data_out[31:24];
-assign uio_out[32-39] = flit_out[7:0];
-
-assign uio_oe[0-39] = 1'b1;
-
-wire *unused = &{ena, 1'b0}; // Unused signals
+	wire _unused = &{ena,data_out[31:19], 1'b0}; // Unused signals
 
 parameter HEADER = 6'b101111;
 parameter TAILER = 8'b11111111;
