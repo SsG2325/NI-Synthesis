@@ -13,15 +13,15 @@ module tt_um_NI(
 	wire [1:0]dest_add;
 	wire [31:0]data_in;
 	wire proc_valid;
-	wire proc_ready;
+	reg proc_ready;
 	wire [31:0]data_out;
-	wire data_valid;
+	reg data_valid;
 	wire proc_ready_in;
 	wire [7:0]flit_in;
 	wire flit_in_valid;
 	wire noc_ready;
-	wire [7:0]flit_out;
-	wire flit_valid;
+	reg [7:0]flit_out;
+	reg flit_valid;
 
 	assign rst = ~rst_n;
 	assign dest_add = ui_in[7:6];
